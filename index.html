@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Интернет-магазин вещей</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f7;
+    color: #333;
+  }
+
+  header {
+    background: #fff;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  header h1 {
+    font-weight: 700;
+    font-size: 3rem;
+    margin-bottom: 50px;
+    color: #222;
+  }
+
+  header p {
+    font-size: 3rem;
+    color: #555;
+  }
+
+  #product-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 30px 20px;
+    justify-content: center;
+  }
+
+  .product {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    transition: box-shadow 0.3s, transform 0.3s;
+    box-sizing: border-box;
+  }
+
+  .product:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transform: translateY(-4px);
+  }
+
+  .product img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    object-fit: cover;
+    margin-bottom: 30px;
+    max-height: 350px;
+  }
+
+  .product h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #111;
+  }
+
+  .product p {
+    margin: 0 0 8px 0;
+    font-size: 0.95rem;
+    color: #555;
+  }
+
+  .price {
+    font-weight: 700;
+    color: #222;
+    font-size: 1.1rem;
+    margin-top: 10px;
+  }
+
+  button {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background-color: #007aff;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  button:hover {
+    background-color: #005bb5;
+    transform: scale(1.02);
+  }
+
+  .product-details {
+    overflow: hidden;
+    max-height: 0;
+    margin-top: 10px;
+    background-color: #f0f0f5;
+    padding: 0 15px;
+    border-radius: 8px;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  .product-details.show {
+    max-height: 200px;
+    padding: 10px 15px;
+  }
+
+  @media(max-width: 1000px){
+    #product-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media(max-width: 600px){
+    #product-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  footer {
+    background: #fff;
+    padding: 30px 20px;
+    text-align: center;
+    font-size: 1rem;
+    border-top: 1px solid #ddd;
+  }
+
+  footer p {
+    margin: 8px 0;
+  }
+
+  .phone {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #4CAF50;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Project Shop</h1>
+  <p>Все собранные средства пойдут в благотворительный фонд <a href="https://nf2217.ru/" target="_blank">"22/17"</a></p>
+  <p>22/17 - фонд моих родственников, в котором помогают людям с нейрофиброматозом, генетическим заболеванием</p>
+</header>
+
+<main>
+  <div id="product-list"></div>
+</main>
+
+<footer>
+  <p>Оставить отзыв:</p>
+  <p class="phone">kchistoprudov@eg-1.ru</p>
+  <p>Или напишите на почту: kchistoprudov@eg-1.ru</p>
+</footer>
+
+<script>
+const products = [
+  {
+    id: 1,
+    name: "Кольцо N1",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6298.JPG"
+  },
+  {
+    id: 2,
+    name: "Кольцо N2",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6299.JPG"
+  },
+  {
+    id: 3,
+    name: "Кольцо N3",
+    description: "Нет в наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6300.JPG"
+  },
+  {
+    id: 4,
+    name: "Кольцо N4",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6306.JPG"
+  },
+  {
+    id: 5,
+    name: "Кольцо N5",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6307.JPG"
+  },
+  {
+    id: 6,
+    name: "Кольцо N6",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6317.JPG"
+  },
+  {
+    id: 7,
+    name: "Кольцо N7",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6319.JPG"
+  },
+  {
+    id: 8,
+    name: "Кольцо N8",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6325.JPG"
+  },
+  {
+    id: 9,
+    name: "Кольцо N9",
+    description: "Нет в наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6326.JPG"
+  },
+  {
+    id: 10,
+    name: "Браслет N1",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6294.JPG"
+  },
+  {
+    id: 11,
+    name: "Браслет N2",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6305.JPG"
+  },
+  {
+    id: 12,
+    name: "Браслет N3",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6309.JPG"
+  },
+  {
+    id: 13,
+    name: "Браслет N4",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6314.JPG"
+  },
+  {
+    id: 14,
+    name: "Браслет N5",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6316.JPG"
+  },
+  {
+    id: 15,
+    name: "Браслет N6",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6318.JPG"
+  },
+  {
+    id: 16,
+    name: "Браслет N7",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6320.JPG"
+  },
+  {
+    id: 17,
+    name: "Браслет N8",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6324.jpg"
+  },
+  {
+    id: 18,
+    name: "Браслет N9",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6329.JPG"
+  },
+  {
+    id: 19,
+    name: "Браслет N10",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6331.JPG"
+  },
+  {
+    id: 20,
+    name: "Браслет N11",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6334.JPG"
+  },
+  {
+    id: 21,
+    name: "Браслет N12",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6335.JPG"
+  },
+  {
+    id: 22,
+    name: "Браслет N13",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6321.JPG"
+  },
+  {
+    id: 23,
+    name: "Бусы N1",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6322.JPG"
+  },
+  {
+    id: 24,
+    name: "Бусы N2",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6323.JPG"
+  },
+  {
+    id: 25,
+    name: "Бусы N3",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6327.JPG"
+  },
+  {
+    id: 26,
+    name: "Бусы N4",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6332.JPG"
+  },
+  {
+    id: 27,
+    name: "Бусы N5",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6333.JPG"
+  },
+  {
+    id: 28,
+    name: "Цепочка N1",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6293.JPG"
+  },
+  {
+    id: 29,
+    name: "Цепочка N2",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6328.JPG"
+  },
+  {
+    id: 30,
+    name: "Цепочка N3",
+    description: "В наличии",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "IMG_6330.JPG"
+  },
+  {
+    id: 31,
+    name: "Товар производится",
+    description: "",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "https://clck.ru/3Pcebk"
+  },
+  {
+    id: 32,
+    name: "Товар производится",
+    description: "",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "https://clck.ru/3Pcebk"
+  },
+  {
+    id: 33,
+    name: "Товар производится",
+    description: "",
+    price: 500,
+    details: "Для заказа звоните: +7 (916) 742-77-54 или пишите на почту: kchistoprudov@eg-1.ru",
+    image: "https://clck.ru/3Pcebk"
+  }
+];
+
+const productListEl = document.getElementById("product-list");
+
+products.forEach(product => {
+  const productEl = document.createElement("div");
+  productEl.classList.add("product");
+ 
+  productEl.innerHTML = `
+    <img src="${product.image}" alt="${product.name}">
+    <h2>${product.name}</h2>
+    <p>${product.description}</p>
+    <p class="price">${product.price} руб.</p>
+    <button type="button">Купить</button>
+    <div class="product-details">${product.details}</div>
+  `;
+
+  const btn = productEl.querySelector("button");
+  const details = productEl.querySelector(".product-details");
+
+  btn.addEventListener("click", () => {
+    const showDetails = !details.classList.contains("show");
+    if (showDetails) {
+      details.classList.add("show");
+      btn.textContent = "Скрыть";
+    } else {
+      details.classList.remove("show");
+      btn.textContent = "Купить";
+    }
+  });
+
+  productListEl.appendChild(productEl);
+});
+</script>
+
+</body>
+</html>
